@@ -15,10 +15,10 @@ class App extends React.Component {
         super(props);
 
         this.state = {
-            uuid: 'MH10CA7103',
-            phone: '9420545042',
-            otp: '192002',
-            login_state: 'verify',
+            uuid: '',
+            phone: '',
+            otp: '',
+            login_state: '',
             data: {}
         };
 
@@ -40,7 +40,7 @@ class App extends React.Component {
 
         var response = await axios({
             method: 'post',
-            url: "http://localhost:3000/login",
+            url: "http://65.2.185.251:3000/login",
             headers: {},
             data: {
                 uuid: uuid,
@@ -101,23 +101,23 @@ class App extends React.Component {
 
                             <div className="form-group">
                                 <label>UUID</label>
-                                <input type="uuid" className="form-control" value={"MH10CA7103"} placeholder="Enter UUID" onChange={this.handle_uuid_change} disabled />
+                                <input type="uuid" className="form-control" value={this.state.uuid} placeholder="Enter UUID" onChange={this.handle_uuid_change} disabled />
                             </div>
 
                             <div className="form-group">
                                 <label>Phone</label>
-                                <input type="phone" className="form-control" value={"9420545042"} placeholder="Enter Phone" onChange={this.handle_phone_change} disabled />
+                                <input type="phone" className="form-control" value={this.state.phone} placeholder="Enter Phone" onChange={this.handle_phone_change} disabled />
                             </div>
 
                             <div className="form-group">
                                 <label>OTP</label>
-                                <input type="otp" className="form-control" value={"192002"} placeholder="Enter OTP" onChange={this.handle_otp_change} />
+                                <input type="otp" className="form-control" placeholder="Enter OTP" onChange={this.handle_otp_change} />
                             </div>
 
                             <button onClick={this.verify_attempt} className="btn btn-dark btn-lg btn-block">Verify and Login</button>
                         </div>
                     </div>
-                ) : ((login_state === undefined) ? (
+                ) : ((login_state === "") ? (
                     <div className="outer">
                         <div className="inner">
                             <img src={logo} alt="Logo" />
@@ -172,7 +172,7 @@ class App extends React.Component {
                                 </Table>
                                 
                                 <h4>Total Distance Travelled: {this.state.data["distanceTravelled"]}</h4>
-                                <Button variant="success">Pay Now</Button>{' '}
+                                <Button variant="success" href="http://65.2.185.251:8000" target="_blank">Pay Now</Button>{' '}
 
                             </Col>
                             <Col xs lg="2">
