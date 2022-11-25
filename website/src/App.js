@@ -1,0 +1,189 @@
+import axios from "axios";
+import React from "react";
+
+import './App.css';
+import logo from './logo.png';
+import Table from 'react-bootstrap/Table';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
+
+
+
+class App extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            uuid: 'MH10CA7103',
+            phone: '9420545042',
+            otp: '192002',
+            login_state: 'verify',
+            data: {}
+        };
+
+        this.handle_uuid_change = this.handle_uuid_change.bind(this);
+        this.handle_phone_change = this.handle_phone_change.bind(this);
+        this.handle_otp_change = this.handle_otp_change.bind(this);
+        this.login_attempt = this.login_attempt.bind(this);
+        this.verify_attempt = this.verify_attempt.bind(this);
+    }
+
+    componentDidMount() {
+        document.title = "Toll System";
+    }
+
+    async login_attempt() {
+        const { credentials } = this.state;
+        const { uuid } = this.state;
+        const { phone } = this.state;
+
+        var response = await axios({
+            method: 'post',
+            url: "http://localhost:3000/login",
+            headers: {},
+            data: {
+                uuid: uuid,
+                phone: phone
+            }
+        });
+
+        if (response.data == "Success") {
+            this.setState({ login_state: "verify" });
+        }
+    }
+
+    async verify_attempt() {
+        const { uuid } = this.state;
+        const { phone } = this.state;
+        const { otp } = this.state;
+
+        var response = await axios({
+            method: 'post',
+            url: "http://localhost:3000/verify",
+            headers: {},
+            data: {
+                uuid: uuid,
+                phone: phone,
+                otp: otp
+            }
+        });
+
+        this.setState({ data: response.data });
+        this.setState({ login_state: "verified" });
+
+    }
+
+    handle_uuid_change(event) {
+        this.setState({ uuid: event.target.value });
+    }
+
+    handle_phone_change(event) {
+        this.setState({ phone: event.target.value });
+    }
+
+    handle_otp_change(event) {
+        this.setState({ otp: event.target.value });
+    }
+
+    render() {
+        const { records } = this.state;
+        const { login_state } = this.state;
+        const { ngo_name } = this.state;
+        return (
+            <div className="some">
+                <title>Toll System - Login</title>
+                {(login_state === "verify") ? (
+                    <div className="outer">
+                        <div className="inner">
+                            <img src={logo} alt="Logo" />
+                            <h3>Log in</h3>
+
+                            <div className="form-group">
+                                <label>UUID</label>
+                                <input type="uuid" className="form-control" value={"MH10CA7103"} placeholder="Enter UUID" onChange={this.handle_uuid_change} disabled />
+                            </div>
+
+                            <div className="form-group">
+                                <label>Phone</label>
+                                <input type="phone" className="form-control" value={"9420545042"} placeholder="Enter Phone" onChange={this.handle_phone_change} disabled />
+                            </div>
+
+                            <div className="form-group">
+                                <label>OTP</label>
+                                <input type="otp" className="form-control" value={"192002"} placeholder="Enter OTP" onChange={this.handle_otp_change} />
+                            </div>
+
+                            <button onClick={this.verify_attempt} className="btn btn-dark btn-lg btn-block">Verify and Login</button>
+                        </div>
+                    </div>
+                ) : ((login_state === undefined) ? (
+                    <div className="outer">
+                        <div className="inner">
+                            <img src={logo} alt="Logo" />
+                            <h3>Log in</h3>
+
+                            <div className="form-group">
+                                <label>UUID</label>
+                                <input type="uuid" className="form-control" placeholder="Enter UUID" onChange={this.handle_uuid_change} />
+                            </div>
+
+                            <div className="form-group">
+                                <label>Phone</label>
+                                <input type="phone" className="form-control" placeholder="Enter Phone" onChange={this.handle_phone_change} />
+                            </div>
+
+                            <button onClick={this.login_attempt} className="btn btn-dark btn-lg btn-block">Get OTP</button>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="outer">
+                        <Row className="justify-content-md-center">
+                            <Col xs lg="2">
+                            </Col>
+                            <Col md="auto">
+                                <h1>Travel History</h1>
+                                <h4>{this.state.uuid}</h4>
+                                <br/>
+                                <Table responsive>
+                                    <thead>
+                                        <tr>
+                                            <th>Timestamp</th>
+                                            <th>Latitude</th>
+                                            <th>Longitude</th>
+                                            <th>Road Name</th>
+                                            <th>Distance(in Meters)</th>
+                                            <th>Toll</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        {this.state.data["coordinates"].map((record) => (
+                                            <tr>
+                                                <td>{record.timestamp}</td>
+                                                <td>{record.latitude}</td>
+                                                <td>{record.longitude}</td>
+                                                <td>{record.roadName}</td>
+                                                <td>{record.distance}</td>
+                                                <td>{record.distance * 0.002}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </Table>
+                                
+                                <h4>Total Distance Travelled: {this.state.data["distanceTravelled"]}</h4>
+                                <Button variant="success">Pay Now</Button>{' '}
+
+                            </Col>
+                            <Col xs lg="2">
+                            </Col>
+                        </Row>
+                    </div>
+                ))}
+
+            </div>
+        );
+    }
+}
+
+export default App;
