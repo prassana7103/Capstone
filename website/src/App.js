@@ -60,7 +60,7 @@ class App extends React.Component {
 
         var response = await axios({
             method: 'post',
-            url: "http://localhost:3000/verify",
+            url: "http://65.2.185.251:3000/verify",
             headers: {},
             data: {
                 uuid: uuid,
