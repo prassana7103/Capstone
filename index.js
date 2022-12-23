@@ -28,22 +28,50 @@ app.post('/gps', async (req, res) => {
     return res.status(400).send("Failed to find vehicle");
   }
 
-  console.log(vehicle.coordinates);
+  var distance = 0;
+  
+  if (vehicle.trips.length == 0) {
+    vehicle.trips.push()
+  }
+  else if(vehicle.trips[vehicle.trips.length - 1].finished){
+    vehicle.trips.push()
+  }
 
-  var lastDistance = "-";
-
-  if (vehicle.coordinates.length > 0) {
-    var lastLat = vehicle.coordinates[vehicle.coordinates.length - 1].latitude;
-    var lastLng = vehicle.coordinates[vehicle.coordinates.length - 1].longitude;
+  if(!vehicle.trips[vehicle.trips.length - 1].started){
+    var lastLat = vehicle.trips[vehicle.trips.length - 1].start.latitude;
+    var lastLng = vehicle.trips[vehicle.trips.length - 1].start.longitude;
 
     var distance = await getDistance(lastLat, lastLng, lat, lng);
 
+    if(distance == 0){
+      vehicle.trips[vehicle.trips.length - 1].start.latitude = lat;
+      vehicle.trips[vehicle.trips.length - 1].start.longitude = lng;
+    }
+    else{
+      vehicle.trips[vehicle.trips.length - 1].started = true;
+      vehicle.trips[vehicle.trips.length - 1].end.latitude = lat;
+      vehicle.trips[vehicle.trips.length - 1].end.longitude = lng;
+      vehicle.trips[vehicle.trips.length - 1].distance += distance;
+    }
     vehicle.distanceTravelled += distance;
-
-    lastDistance = distance;
   }
+  else{
+    var lastLat = vehicle.trips[vehicle.trips.length - 1].end.latitude;
+    var lastLng = vehicle.trips[vehicle.trips.length - 1].end.longitude;
 
-  vehicle.coordinates.push({latitude: lat, longitude: lng, distance: lastDistance, timestamp: new Date(), roadName: "NH48"});
+    var distance = await getDistance(lastLat, lastLng, lat, lng);
+
+    if(distance == 0){
+      vehicle.trips[vehicle.trips.length - 1].finished = true;
+    }
+    else{
+      vehicle.trips[vehicle.trips.length - 1].end.latitude = lat;
+      vehicle.trips[vehicle.trips.length - 1].end.longitude = lng;
+      vehicle.trips[vehicle.trips.length - 1].distance += distance;
+    }
+
+    vehicle.distanceTravelled += distance;
+  }
 
   vehicle.save();
 
