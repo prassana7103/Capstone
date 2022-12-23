@@ -149,21 +149,19 @@ class App extends React.Component {
                                     <thead>
                                         <tr>
                                             <th>Timestamp</th>
-                                            <th>Latitude</th>
-                                            <th>Longitude</th>
-                                            <th>Road Name</th>
+                                            <th>Start Coordinated</th>
+                                            <th>End Coordinates</th>
                                             <th>Distance(in Meters)</th>
                                             <th>Toll</th>
                                         </tr>
                                     </thead>
 
                                     <tbody>
-                                        {this.state.data["coordinates"].map((record) => (
+                                        {this.state.data["trips"].map((record) => (
                                             <tr>
-                                                <td>{record.timestamp}</td>
-                                                <td>{record.latitude}</td>
-                                                <td>{record.longitude}</td>
-                                                <td>{record.roadName}</td>
+                                                <td>{record.start.timestamp}</td>
+                                                <td>{record.start.latitude}, {record.start.longitude}</td>
+                                                <td>{record.end.latitude}, {record.end.longitude}</td>
                                                 <td>{record.distance}</td>
                                                 <td>{record.distance * 0.002}</td>
                                             </tr>

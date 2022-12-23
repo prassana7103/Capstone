@@ -144,7 +144,7 @@ app.post('/verify', async (req, res) => {
   }
 
   if (vehicle.phone == phone && vehicle.otp == otp) {
-    return res.status(200).send({distanceTravelled: vehicle["distanceTravelled"], coordinates:vehicle["coordinates"], bill: vehicle["distanceTravelled"]*0.02});
+    return res.status(200).send({distanceTravelled: vehicle["distanceTravelled"], trips:vehicle["trips"], bill: vehicle["distanceTravelled"]*0.02});
   }
 
   return res.status(500).send("Failed");
