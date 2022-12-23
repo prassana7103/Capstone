@@ -149,10 +149,11 @@ class App extends React.Component {
                                     <thead>
                                         <tr>
                                             <th>Timestamp</th>
-                                            <th>Start Coordinated</th>
+                                            <th>Start Coordinates</th>
                                             <th>End Coordinates</th>
                                             <th>Distance(in Meters)</th>
                                             <th>Toll</th>
+                                            <th>Payment</th>
                                         </tr>
                                     </thead>
 
@@ -164,13 +165,16 @@ class App extends React.Component {
                                                 <td>{record.end.latitude}, {record.end.longitude}</td>
                                                 <td>{record.distance}</td>
                                                 <td>{record.distance * 0.002}</td>
+                                                <td>
+                                <Button variant="success" href="http://65.2.185.251:8000" target="_blank">Pay Now</Button>{' '}
+                                </td>
                                             </tr>
                                         ))}
                                     </tbody>
                                 </Table>
                                 
                                 <h4>Total Distance Travelled: {this.state.data["distanceTravelled"]}</h4>
-                                <Button variant="success" href="http://65.2.185.251:8000" target="_blank">Pay Now</Button>{' '}
+                                <h4>Total Toll: {this.state.data["distanceTravelled"]*0.002}</h4>
 
                             </Col>
                             <Col xs lg="2">

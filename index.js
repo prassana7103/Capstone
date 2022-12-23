@@ -49,6 +49,7 @@ app.post('/gps', async (req, res) => {
     }
     else{
       vehicle.trips[vehicle.trips.length - 1].started = true;
+      vehicle.trips[vehicle.trips.length - 1].start.timestamp = Date.now();
       vehicle.trips[vehicle.trips.length - 1].end.latitude = lat;
       vehicle.trips[vehicle.trips.length - 1].end.longitude = lng;
       vehicle.trips[vehicle.trips.length - 1].distance += distance;
@@ -68,6 +69,7 @@ app.post('/gps', async (req, res) => {
       vehicle.trips[vehicle.trips.length - 1].end.latitude = lat;
       vehicle.trips[vehicle.trips.length - 1].end.longitude = lng;
       vehicle.trips[vehicle.trips.length - 1].distance += distance;
+      vehicle.trips[vehicle.trips.length - 1].end.timestamp = Date.now();
     }
 
     vehicle.distanceTravelled += distance;
