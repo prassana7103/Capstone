@@ -31,10 +31,10 @@ app.post('/gps', async (req, res) => {
   var distance = 0;
   
   if (vehicle.trips.length == 0) {
-    vehicle.trips.push()
+    vehicle.trips.push({start: {latitude: 0, longitude: 0, timestamp: Date.now()}, end: {latitude: 0, longitude: 0, timestamp: Date.now()}, distance: 0, started: false, finished: false});
   }
   else if(vehicle.trips[vehicle.trips.length - 1].finished){
-    vehicle.trips.push()
+    vehicle.trips.push({start: {latitude: 0, longitude: 0, timestamp: Date.now()}, end: {latitude: 0, longitude: 0, timestamp: Date.now()}, distance: 0, started: false, finished: false});
   }
 
   if(!vehicle.trips[vehicle.trips.length - 1].started){
