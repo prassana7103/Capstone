@@ -143,6 +143,8 @@ class App extends React.Component {
                             </Col>
                             <Col md="auto">
                                 <h1>Travel History</h1>
+                                <button onClick={this.verify_attempt} className="btn btn-success">Refresh</button>
+                                <br />
                                 <h4>{this.state.uuid}</h4>
                                 <br/>
                                 <Table responsive>
