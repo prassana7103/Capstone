@@ -6,7 +6,13 @@ async function getDistance(lastLat, lastLng, lat, lng){
     const uri = "https://api.mapbox.com/matching/v5/mapbox/driving/" + lng + "," + lat + ";" + lastLng + "," + lastLat + "?access_token=" + process.env.MAPBOX_TOKEN;
 
     console.log(uri);
-    const response = await axios.get(uri);
+
+    try{
+        const response = await axios.get(uri);
+    }
+    catch(ex){
+        return 0;
+    }
 
     if(response["code"]=="NoSegment")
         return 0;
